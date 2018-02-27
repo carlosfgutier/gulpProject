@@ -8,6 +8,10 @@ var uglify = require('gulp-uglify');
 var gulpIf = require('gulp-if');
 //to minimize css
 var cssnano = require('gulp-cssnano');
+//to optimize images
+var imagemin = require('gulp-imagemin');
+//to save image cache and avoid repeating image optimization
+var cache = require('gulp-cache');
 
 gulp.task('hello', function() {
 	console.log("Hello Carlos");
@@ -32,6 +36,7 @@ gulp.task('hello', function() {
 
 // AUTOMATIC BROWSER RELOAD
 //------------------------------------------
+// BrowserSync Task
 gulp.task('browserSync', function() {
 	browserSync.init({
 		server: {
@@ -48,6 +53,16 @@ gulp.task('sass', function() {
     .pipe(browserSync.reload({
       stream: true
     }))
+});
+
+// Image optimize task
+gulp.task('images', function() {
+	return gulp.src('app/images/**/*.+(png|jpg|svg|gif')
+	.pipe(cache(imagemin({
+		//to create interlaced gifs or customize how files are optimzed
+		interlaced: true
+	})))
+	.pipe(gulp.dest('dist/images'))
 });
 
 //WATCHING
