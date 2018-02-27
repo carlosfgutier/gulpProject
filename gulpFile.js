@@ -3,9 +3,11 @@ var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
 //to optimize
 var useref = require('gulp-useref');
-//to minimize
+//to minimize js
 var uglify = require('gulp-uglify');
 var gulpIf = require('gulp-if');
+//to minimize css
+var cssnano = require('gulp-cssnano');
 
 gulp.task('hello', function() {
 	console.log("Hello Carlos");
@@ -61,11 +63,13 @@ gulp.task('watch', ['browserSync', 'sass'], function() {
 	//Whatever other files I want to watch
 });
 
+// Concatenate js files
 gulp.task('useref', function() {
 	return gulp.src('app/*.html')
 	.pipe(useref())
-	.pipe(gulp.dest('dist'))
 	//to minify only if its a js file
 	.pipe(gulpIf('*.js', uglify()))
+	//to minify only if its a css file
+	.pipe(gulpIf('*.css', cssnano()))
 	.pipe(gulp.dest('dist'))
 });
