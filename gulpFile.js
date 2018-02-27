@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
+var browserSync = require('browser-sync').create();
 
 gulp.task('hello', function() {
 	console.log("Hello Carlos");
@@ -22,6 +23,26 @@ gulp.task('hello', function() {
 // 	.pipe(gulp.dest('app/css'))
 // });
 
+// AUTOMATIC BROWSER RELOAD
+//------------------------------------------
+gulp.task('browserSync', function() {
+	browserSync.init({
+		server: {
+			baseDir: 'app'
+		},
+	})
+});
+
+// Update sass task to allow browserSync to update CSS
+gulp.task('sass', function() {
+  return gulp.src('app/scss/**/*.scss')
+  	.pipe(sass())
+    .pipe(gulp.dest('app/css'))
+    .pipe(browserSync.reload({
+      stream: true
+    }))
+});
+
 //WATCHING
 //------------------------------------------
 // Single watch
@@ -31,26 +52,4 @@ gulp.task('hello', function() {
 gulp.task('watch', ['browserSync', 'sass'], function() {
 	gulp.watch('app/scss/**/*.scss', ['sass']);
 	//Whatever other files I want to watch
-});
-
-// AUTOMATIC BROWSER RELOAD
-//------------------------------------------
-var browserSync = require('browser-sync').create();
-
-gulp.task('browserSync', function() {
-	browserSync.init({
-		server: {
-			baseDir: 'app'
-		},
-	});
-});
-
-// Update sass task to allow browserSync to update CSS
-gulp.task('sass', function() {
-	return gulp.src('app/css/**/*.scss')
-	.pipe(sass())
-	.pipe(gulp.dest('app/css'))
-	.pipe(browserSync.reload({
-		stream: true
-	}));
 });
