@@ -1,7 +1,11 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
+//to optimize
 var useref = require('gulp-useref');
+//to minimize
+var uglify = require('gulp-uglify');
+var gulpIf = require('gulp-if');
 
 gulp.task('hello', function() {
 	console.log("Hello Carlos");
@@ -60,5 +64,8 @@ gulp.task('watch', ['browserSync', 'sass'], function() {
 gulp.task('useref', function() {
 	return gulp.src('app/*.html')
 	.pipe(useref())
+	.pipe(gulp.dest('dist'))
+	//to minify only if its a js file
+	.pipe(gulpIf('*.js', uglify()))
 	.pipe(gulp.dest('dist'))
 });
