@@ -55,9 +55,14 @@ gulp.task('sass', function() {
     }))
 });
 
+gulp.task('fonts', function() {
+	return gulp.src('app/fonts/**/*')
+	.pipe(gulp.dest('dist/fonts'))
+});
+
 // Image optimize task
 gulp.task('images', function() {
-	return gulp.src('app/images/**/*.+(png|jpg|svg|gif')
+	return gulp.src('app/images/**/*.+(png|jpg|jpeg|gif|svg)')
 	.pipe(cache(imagemin({
 		//to create interlaced gifs or customize how files are optimzed
 		interlaced: true
