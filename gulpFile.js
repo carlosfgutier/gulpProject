@@ -12,6 +12,10 @@ var cssnano = require('gulp-cssnano');
 var imagemin = require('gulp-imagemin');
 //to save image cache and avoid repeating image optimization
 var cache = require('gulp-cache');
+//to clean, delete files that re no longer in used
+var del = require('del');
+//to run tasks in a specific order rather than all at once
+var runSequence = require('run-sequence');
 
 gulp.task('hello', function() {
 	console.log("Hello Carlos");
@@ -34,7 +38,7 @@ gulp.task('hello', function() {
 // 	.pipe(gulp.dest('app/css'))
 // });
 
-// AUTOMATIC BROWSER RELOAD
+// AUTOMATIC BROWSER RELOAD AND FILE GENERATION
 //------------------------------------------
 // BrowserSync Task
 gulp.task('browserSync', function() {
@@ -91,5 +95,19 @@ gulp.task('useref', function() {
 	.pipe(gulpIf('*.js', uglify()))
 	//to minify only if its a css file
 	.pipe(gulpIf('*.css', cssnano()))
-	.pipe(gulp.dest('dist'))
+	.pipe(gulp.dest('dist'));
 });
+
+//CLEANING
+//------------------------------------------
+gulp.task('clean:dist', function() {
+	return del.sync('dist');
+});
+
+gulp.task('build', function() {
+	runSequence('clean:dist',
+	['sass', 'useref', 'images', 'fonts'], 
+	callback
+	)
+});
+
