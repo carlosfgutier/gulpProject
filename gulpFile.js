@@ -111,3 +111,9 @@ gulp.task('build', function() {
 	)
 });
 
+// Does same as 'watch' but run by simply typing the command gulp
+gulp.task('default', function (callback) {
+  runSequence(['sass','browserSync', 'watch'],
+    callback
+  )
+})
