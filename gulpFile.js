@@ -91,9 +91,7 @@ gulp.task('watch', ['browserSync', 'sass'], function() {
 gulp.task('useref', function() {
 	return gulp.src('app/*.html')
 	.pipe(useref())
-	//to minify only if its a js file
 	.pipe(gulpIf('*.js', uglify()))
-	//to minify only if its a css file
 	.pipe(gulpIf('*.css', cssnano()))
 	.pipe(gulp.dest('dist'));
 });
